@@ -1,4 +1,5 @@
-
+import Container from 'react-bootstrap/Container';
+import Header from './components/Header';
 
 export default function App() {
 
@@ -30,21 +31,23 @@ export default function App() {
   ]
 
   return (
-      <>
-        <h1>Microblog</h1>
-          {testPosts.length === 0 ?
-              <p>There are no blog posts.</p>
-              :
-          testPosts.map(testPost => {
-              return (
-                  <p key={testPost.id}>
-                      <b>{testPost.author.username}</b> &mdash; {testPost.timestamp}
-                      <br/>
-                      {testPost.text}
-                  </p>
-              );
-          })
-          }
-      </>
+      <Container fluid className="App">
+        <Header />
+          <Container>
+              {testPosts.length === 0 ?
+                  <p>There are no blog posts.</p>
+                  :
+                  testPosts.map(testPost => {
+                      return (
+                          <p key={testPost.id}>
+                              <b>{testPost.author.username}</b> &mdash; {testPost.timestamp}
+                              <br/>
+                              {testPost.text}
+                          </p>
+                      );
+                  })
+              }
+          </Container>
+      </Container>
   );
 }
