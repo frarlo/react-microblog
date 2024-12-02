@@ -1,5 +1,7 @@
 import Container from 'react-bootstrap/Container';
+import Stack from 'react-bootstrap/Stack';
 import Header from './components/Header';
+import Sidebar from './components/Sidebar';
 
 export default function App() {
 
@@ -34,19 +36,24 @@ export default function App() {
       <Container fluid className="App">
         <Header />
           <Container>
-              {testPosts.length === 0 ?
-                  <p>There are no blog posts.</p>
-                  :
-                  testPosts.map(testPost => {
-                      return (
-                          <p key={testPost.id}>
-                              <b>{testPost.author.username}</b> &mdash; {testPost.timestamp}
-                              <br/>
-                              {testPost.text}
-                          </p>
-                      );
-                  })
-              }
+              <Stack direction="horizontal">
+                  <Sidebar />
+                  <Container>
+                      {testPosts.length === 0 ?
+                          <p>There are no blog posts.</p>
+                          :
+                          testPosts.map(testPost => {
+                              return (
+                                  <p key={testPost.id}>
+                                      <b>{testPost.author.username}</b> &mdash; {testPost.timestamp}
+                                      <br/>
+                                      {testPost.text}
+                                  </p>
+                              );
+                          })
+                      }
+                  </Container>
+              </Stack>
           </Container>
       </Container>
   );
