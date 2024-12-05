@@ -1,48 +1,44 @@
+import { useState, useEffect } from 'react';
+import Spinner from 'react-bootstrap/Spinner';
+import Post from './Post';
 
+const BASE_API_URL = process.env.REACT_APP_BASE_API_URL;
 
 export default function Posts() {
 
-    const testPosts = [
-        {
-            id: 1,
-            text: 'Hello world! Currently testing React.',
-            timestamp: 'a minute ago',
-            author: {
-                username: 'John Doe'
-            },
-        },
-        {
-            id: 2,
-            text: 'This is a second post',
-            timestamp: 'a year ago',
-            author: {
-                username: 'Jane Doe'
-            },
-        },
-        {
-            id: 3,
-            text: 'Hello from the beginning of time.',
-            timestamp: 'an epoch ago',
-            author: {
-                username: 'Linus Torvalds'
-            },
-        },
-    ]
+    const [posts, setPosts] = useState();
+
+    useEffect(() => {
+        (async () => {
+            const response = await fetch(BASE_API_URL + '/api/feed');
+            if(response.ok) {
+                const results = await response.json();
+                setPosts(results.data);
+            }
+            else{
+                setPosts(null);
+            }
+        })();
+    }, []);
 
     return (
         <>
-            {testPosts.length === 0 ?
-                <p>There are no blog posts.</p>
+            {posts === undefined ?
+                <Spinner animation="border"/>
                 :
-                testPosts.map(testPost => {
-                    return (
-                        <p key={testPost.id}>
-                            <b>{testPost.author.username}</b> &mdash; {testPost.timestamp}
-                            <br/>
-                            {testPost.text}
-                        </p>
-                    );
-                })
+                <>
+                    {posts === null ?
+                        <p>Could not retrieve blog posts.</p>
+                        :
+                        <>
+                            {posts.length === 0 ?
+                                <p>There are no blog posts.</p>
+                                :
+                                posts.map(post => <Post key={post.id} post={post}/>)
+                            }
+                        </>
+                    }
+                </>
             }
         </>
     );
